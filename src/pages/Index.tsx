@@ -1,9 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Package, Users, MessageSquare, HandHeart, Receipt, MapPin, CreditCard } from "lucide-react";
+import { Bell, Package, Users, MessageSquare, HandHeart, Receipt, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
+  const { profile, signOut } = useAuth();
+  
   const modules = [
     {
       title: "Avisos de la administración",
@@ -49,15 +52,35 @@ const Index = () => {
     }
   ];
 
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="bg-primary text-primary-foreground p-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl font-bold mb-2">Bienvenido a Veciapp</h1>
-          <Badge variant="secondary" className="bg-white/20 text-white text-lg px-4 py-2">
-            Torre A - Apt 203
-          </Badge>
+        <div className="max-w-4xl mx-auto">
+          <div className="flex justify-between items-center">
+            <div className="text-center flex-1">
+              <h1 className="text-4xl font-bold mb-2">Bienvenido a Veciapp</h1>
+              <p className="text-xl mb-2">Hola, {profile?.full_name}</p>
+              {profile?.apartment_number && profile?.tower && (
+                <Badge variant="secondary" className="bg-white/20 text-white text-lg px-4 py-2">
+                  Torre {profile.tower} - Apt {profile.apartment_number}
+                </Badge>
+              )}
+            </div>
+            <Button
+              onClick={handleSignOut}
+              variant="outline"
+              size="lg"
+              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+            >
+              <LogOut className="h-6 w-6 mr-2" />
+              Salir
+            </Button>
+          </div>
         </div>
       </div>
 
